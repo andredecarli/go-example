@@ -12,3 +12,6 @@ up: build run
 
 clean:
 	docker rmi $(BINARY_NAME):latest
+
+test:
+	go test ./... -cover
