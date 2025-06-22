@@ -1,0 +1,6 @@
+.git
+*.md
+*.log
+Dockerfile
+docker-compose.yml
+Makefile
