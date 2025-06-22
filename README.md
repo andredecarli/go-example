@@ -1,4 +1,4 @@
-# Exemplo de Projeto Go
+# Exemplo de Projeto Go - Test Suite
 
 Este projeto demonstra padrões comuns e boas práticas para estruturar aplicações em Go, incluindo interfaces, injeção de dependência, princípios de arquitetura limpa e padrões de design comuns.
 
