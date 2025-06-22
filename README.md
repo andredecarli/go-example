@@ -101,8 +101,12 @@ var ErrCustomerNotFound = errors.New("customer not found")
 
 2. **Execute a aplicação**
    ```bash
-   go run cmd/main.go
+   go run ./cmd/main.go
    ```
+3. **Executando os testes**
+    ```bash
+    go test -v ./...
+    ```
 
 ### Usando Docker
 
@@ -113,19 +117,22 @@ var ErrCustomerNotFound = errors.New("customer not found")
 
 2. **Execute o container**
    ```bash
-   docker run --rm -it app:latest
+   docker run --rm -p 8080:8080 app:latest
    ```
 
 ### Usando Makefile
 
 O projeto inclui um `Makefile` com comandos comuns:
 
-```bash
-make build    # Construir imagem Docker
-make run      # Executar container Docker
-make up       # Construir e executar
-make clean    # Remover imagem Docker
-```
+| Comando                 | Descrição                          |
+|-------------------------|----------------------------------- |
+| `make build`            | Construir imagem Docker            |
+| `make run`              | Executar container Docker          |
+| `make up`               | Construir e executar (build + run) |
+| `make clean`            | Remover imagem Docker              |
+| `make go-run`           | Executar a aplicação localmente    |
+| `make test`             | Executar os testes Go              |
+| `make docker-compose-up`| Subir a stack via docker-compose   |
 
 ## 📋 O que a Aplicação Faz
 
@@ -138,7 +145,7 @@ Quando você executa a aplicação, ela demonstra um fluxo completo de CRUD:
 5. **Remove** o cliente
 6. **Verifica** a remoção tentando encontrar o cliente novamente
 
-A aplicação usa um repositório em memória, então os dados são perdidos quando o programa termina.
+A aplicação usa banco de dados MongoDB para persistencia dos dados.
 
 ## 🧪 Testando os Padrões
 
@@ -148,15 +155,6 @@ A aplicação demonstra vários conceitos importantes do Go:
 - **Inversão de Dependência**: Módulos de alto nível não dependem de módulos de baixo nível
 - **Responsabilidade Única**: Cada struct tem um propósito claro
 - **Princípio Aberto/Fechado**: Fácil de estender com novas implementações de repositório
-
-## 🔄 Estendendo o Projeto
-
-Para adicionar uma nova implementação de banco de dados (ex: PostgreSQL):
-
-1. Crie um novo arquivo em `internal/infra/db/postgresql/customer.go`
-2. Implemente a interface `CustomerRepository`
-3. Atualize `cmd/main.go` para usar a nova implementação
-4. Nenhuma mudança necessária nos serviços ou controllers!
 
 ---
 

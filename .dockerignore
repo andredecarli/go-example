@@ -1,6 +1,7 @@
 .git
 *.md
 *.log
+*.http
 Dockerfile
 docker-compose.yml
 Makefile
