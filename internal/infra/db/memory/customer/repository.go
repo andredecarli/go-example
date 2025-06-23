@@ -19,8 +19,8 @@ func NewRepository() *repository {
 func (r *repository) Create(_ context.Context, customer *customer.Customer) (*customer.Customer, error) {
 	model := toModel(customer)
 	model.ID = uuid.NewString()
-	model.CreatedAt = time.Now()
-	model.UpdatedAt = time.Now()
+	model.CreatedAt = time.Now().UTC()
+	model.UpdatedAt = time.Now().UTC()
 
 	r.customers[model.ID] = model
 	return toEntity(model), nil

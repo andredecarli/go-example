@@ -1,34 +1,43 @@
 package main
 
 import (
-	"context"
 	"log"
-	"time"
+	"net/http"
 
 	customerService "github.com/andredecarli/go-example/internal/application/customer"
-	customerController "github.com/andredecarli/go-example/internal/controllers/core/customer"
-	customerRepository "github.com/andredecarli/go-example/internal/infra/db/memory/customer"
+	customerController "github.com/andredecarli/go-example/internal/controllers/http/customer"
+	"github.com/andredecarli/go-example/internal/infra/config"
+	customerRepository "github.com/andredecarli/go-example/internal/infra/db/mongodb/customer"
 )
 
 func main() {
 	log.Println("System started.")
-	ctx := context.Background()
-	time.Sleep(1 * time.Second)
 
-	customerRepository := customerRepository.NewRepository()
+	cfg := config.LoadConfig()
+
+	client, err := config.NewMongoClient(cfg)
+	if err != nil {
+		log.Fatalf("Error creating MongoDB client: %v", err)
+	}
+
+	db := client.Database(cfg.MongoDatabase)
+
+	log.Println("MongoDB client created.")
+	customerRepository := customerRepository.NewRepository(db)
 	log.Println("Customer repository created.")
-	time.Sleep(1 * time.Second)
 
 	customerService := customerService.NewService(customerRepository)
 	log.Println("Customer service created.")
-	time.Sleep(1 * time.Second)
 
-	customerController := customerController.NewCustomerController(customerService)
-	log.Println("Customer controller created.")
-	time.Sleep(2 * time.Second)
+	customerHandler := customerController.NewHandler(customerService)
+	log.Println("Customer handler created.")
 
-	customerController.Create(ctx, "John Doe", "john.doe@example.com")
-	time.Sleep(5 * time.Second)
+	mux := http.NewServeMux()
+	customerController.RegisterRoutes(mux, customerHandler)
+	log.Println("Customer routes registered.")
 
-	log.Println("System shut down.")
+	log.Println("Listening on port 8080...")
+	if err := http.ListenAndServe(":8080", mux); err != nil {
+		log.Fatal(err)
+	}
 }

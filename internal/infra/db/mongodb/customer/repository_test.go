@@ -67,6 +67,8 @@ func (s *MongoDBRepositoryTestSuite) TestRepository_Create() {
 	s.NotEmpty(created.ID)
 	s.Equal(customer.Name, created.Name)
 	s.Equal(customer.Email, created.Email)
+	s.NotEmpty(created.CreatedAt)
+	s.NotEmpty(created.UpdatedAt)
 }
 
 func TestMongoDBRepositoryTestSuite(t *testing.T) {

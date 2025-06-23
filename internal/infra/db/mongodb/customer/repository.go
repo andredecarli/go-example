@@ -2,6 +2,7 @@ package customer
 
 import (
 	"context"
+	"time"
 
 	"github.com/andredecarli/go-example/internal/domain/customer"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -18,6 +19,8 @@ func NewRepository(db *mongo.Database) *Repository {
 
 func (r *Repository) Create(ctx context.Context, customer *customer.Customer) (*customer.Customer, error) {
 	model := toModel(customer)
+	model.CreatedAt = time.Now().UTC()
+	model.UpdatedAt = time.Now().UTC()
 
 	result, err := r.collection.InsertOne(ctx, model)
 	if err != nil {
