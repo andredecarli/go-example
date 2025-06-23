@@ -1,13 +1,15 @@
-package entities
+// Package customer contains the customer entity
+package customer
 
 import (
 	"fmt"
 
+	"github.com/andredecarli/go-example/internal/domain/base"
 	"github.com/andredecarli/go-example/pkg/util"
 )
 
 type Customer struct {
-	Entity
+	base.Entity
 
 	Name  string
 	Email string
